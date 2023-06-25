@@ -1,19 +1,38 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/security/Pausable.sol";
-import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721Upgradeable.sol";
+import "@openzeppelin/contracts/security/PausableUpgradeable.sol";
+import "@openzeppelin/contracts/access/AccessControlUpgradeable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721BurnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
-contract MiPrimerNft is ERC721, Pausable, AccessControl, ERC721Burnable {
+contract MiPrimerNft is
+    ERC721Upgradeable,
+    PausableUpgradeable,
+    AccessControlUpgradeable,
+    ERC721BurnableUpgradeable,
+    UUPSUpgradeable
+{
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
-    constructor() ERC721("MiPrimerNft", "MPRNFTRM") {
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _grantRole(PAUSER_ROLE, msg.sender);
-        _grantRole(MINTER_ROLE, msg.sender);
+    // constructor() ERC721("MiPrimerNft", "MPRNFTRM") {
+    //     _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+    //     _grantRole(PAUSER_ROLE, msg.sender);
+    //     _grantRole(MINTER_ROLE, msg.sender);
+    // }
+
+    function initialize() public initializer {
+        __ERC721_init("MiPrimerNft", "MPRNFTRM");
+        __Pausable_init();
+        __AccessControl_init();
+        __ERC721Burnable_init();
+        __UUPSUpgradeable_init();
+
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _setupRole(PAUSER_ROLE, msg.sender);
+        _setupRole(MINTER_ROLE, msg.sender);
     }
 
     function _baseURI() internal pure override returns (string memory) {
@@ -45,7 +64,16 @@ contract MiPrimerNft is ERC721, Pausable, AccessControl, ERC721Burnable {
 
     function supportsInterface(
         bytes4 interfaceId
-    ) public view override(ERC721, AccessControl) returns (bool) {
+    )
+        public
+        view
+        override(ERC721Upgradeable, AccessControlUpgradeable)
+        returns (bool)
+    {
         return super.supportsInterface(interfaceId);
     }
+
+    function _authotrizeUpgrade(
+        address newImplementation
+    ) internal virtual override onlyRole(DEFAULT_ADMIN_ROLE) {}
 }
