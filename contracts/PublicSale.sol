@@ -35,6 +35,7 @@ contract PublicSale is
     uint256 constant PRICE_COMMON_NFT = 500 * 10 ** 18;
     uint256 constant LEGENDARY_PRICE_BASE = 10000 * 10 ** 18;
     uint256 constant LEGENDARY_PRICE_INCREMENT = 1000 * 10 ** 18;
+    uint256 constant MIN_ETHER_AMOUNT = 0.01 ether;
 
     // Gnosis Safe
     // Crear su setter
@@ -44,6 +45,9 @@ contract PublicSale is
 
     // Lista de ids vendidos
     mapping(uint256 => bool) private _idsSold;
+
+    // Contador de ids vendidos
+    uint256 private _idsSoldCount;
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -62,13 +66,20 @@ contract PublicSale is
 
     function setMiPrimerToken(
         address _miPrimerToken
-    ) external onlyRole(UPGRADER_ROLE) {
+    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        // Validación address 0
+        require(_miPrimerToken != address(0), "Public Sale: Invalid address");
         miPrimerToken = IERC20Upgradeable(_miPrimerToken);
     }
 
     function setGnosisSafeWallet(
         address _gnosisSafeWallet
-    ) external onlyRole(UPGRADER_ROLE) {
+    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        // Validación address 0
+        require(
+            _gnosisSafeWallet != address(0),
+            "Public Sale: Invalid address"
+        );
         gnosisSafeWallet = _gnosisSafeWallet;
     }
 
@@ -110,27 +121,24 @@ contract PublicSale is
         // Marcar el id como vendido
         _idsSold[_id] = true;
 
+        // Incrementar el contador de ids vendidos
+        _idsSoldCount = _idsSoldCount.add(1);
+
         // EMITIR EVENTO para que lo escuche OPEN ZEPPELIN DEFENDER
         emit DeliverNft(msg.sender, _id);
-    }
-
-    function _areNFTsAvailable() internal view returns (bool) {
-        for (uint256 i = 1; i <= MAX_NFT_SUPPLY; i++) {
-            if (!_idsSold[i]) {
-                return true;
-            }
-        }
-        return false;
     }
 
     function depositEthForARandomNft() public payable {
         // Realizar 2 validaciones
         // 1 - que el msg.value sea mayor o igual a 0.01 ether
-        require(msg.value >= 0.01 ether, "Public Sale: Not enough ether");
+        require(msg.value >= MIN_ETHER_AMOUNT, "Public Sale: Not enough ether");
         // 2 - que haya NFTs disponibles para hacer el random
-        require(_areNFTsAvailable(), "Public Sale: No more NFTs available");
+        require(
+            _idsSoldCount < MAX_NFT_SUPPLY,
+            "Public Sale: No more NFTs available"
+        );
 
-        // Escgoer una id random de la lista de ids disponibles
+        // Escoger una id random de la lista de ids disponibles
         uint256 nftId = _getRandomNftId();
 
         // Enviar ether a Gnosis Safe
@@ -141,12 +149,18 @@ contract PublicSale is
 
         // Dar el cambio al usuario
         // El vuelto seria equivalente a: msg.value - 0.01 ether
-        uint256 change = msg.value.sub(0.01 ether);
+        uint256 change = msg.value.sub(MIN_ETHER_AMOUNT);
         if (change > 0) {
             // logica para dar cambio
             // usar '.transfer' para enviar ether de vuelta al usuario
             payable(msg.sender).transfer(change);
         }
+
+        // Marcar el id como vendido
+        _idsSold[nftId] = true;
+
+        // Incrementar el contador de ids vendidos
+        _idsSoldCount = _idsSoldCount.add(1);
 
         // EMITIR EVENTO para que lo escuche OPEN ZEPPELIN DEFENDER
         emit DeliverNft(msg.sender, nftId);
@@ -163,7 +177,24 @@ contract PublicSale is
     ////////////////////////////////////////////////////////////////////////
 
     // Devuelve un id random de NFT de una lista de ids disponibles
-    function _getRandomNftId() internal view returns (uint256) {}
+    function _getRandomNftId() internal view returns (uint256) {
+        uint totalAvailable = MAX_NFT_SUPPLY.sub(_idsSoldCount);
+        uint256 randomTemp = uint256(
+            keccak256(abi.encodePacked(block.timestamp, msg.sender))
+        );
+        uint256 randomIndex = randomTemp.mod(totalAvailable);
+
+        uint count = 0;
+        for (uint i = 1; i <= MAX_NFT_SUPPLY; i++) {
+            if (!_idsSold[i]) {
+                count++;
+                if (count == randomIndex) {
+                    return i;
+                }
+            }
+        }
+        revert("Public Sale: No more NFTs available");
+    }
 
     // Según el id del NFT, devuelve el precio. Existen 3 grupos de precios
     function _getPriceById(uint256 _id) internal view returns (uint256) {
