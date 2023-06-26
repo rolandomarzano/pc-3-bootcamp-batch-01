@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.19;
+pragma solidity 0.8.18;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
@@ -144,7 +144,7 @@ contract PublicSale is
         // Enviar ether a Gnosis Safe
         // SUGERENCIA: Usar gnosisSafeWallet.call para enviar el ether
         // Validar los valores de retorno de 'call' para saber si se envio el ether correctamente
-        (bool success, ) = gnosisSafeWallet.call{value: msg.value}("");
+        (bool success, ) = gnosisSafeWallet.call{value: 0.01 ether}("");
         require(success, "Public Sale: Ether transfer to Gnosis Safe failed");
 
         // Dar el cambio al usuario
@@ -193,7 +193,7 @@ contract PublicSale is
                 }
             }
         }
-        revert("Public Sale: No more NFTs available");
+        return count;
     }
 
     // Según el id del NFT, devuelve el precio. Existen 3 grupos de precios
