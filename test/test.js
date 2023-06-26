@@ -232,7 +232,7 @@ describe('MI PRIMER TOKEN TESTING', function () {
         await expect(tx).to.changeTokenBalance(
           miPrimerToken,
           alice,
-          parseEth(-price)
+          pEth((-price).toString())
         );
       });
       it('Gnosis safe recibe comisión del 10% luego de compra', async () => {
@@ -242,7 +242,7 @@ describe('MI PRIMER TOKEN TESTING', function () {
         await expect(tx).to.changeTokenBalance(
           miPrimerToken,
           gnosis,
-          parseEth(price)
+          pEth(price.toString())
         );
       });
       it('Smart contract recibe neto (90%) luego de compra', async () => {
@@ -252,7 +252,7 @@ describe('MI PRIMER TOKEN TESTING', function () {
         await expect(tx).to.changeTokenBalance(
           miPrimerToken,
           publicSale,
-          parseEth(price)
+          pEth(price.toString())
         );
       });
     });
@@ -306,7 +306,7 @@ describe('MI PRIMER TOKEN TESTING', function () {
           })
         ).to.be.revertedWith('Public Sale: No more NFTs available');
       });
-      it.only('Da vuelto cuando y gnosis recibe Ether', async () => {
+      it('Da vuelto cuando y gnosis recibe Ether', async () => {
         // Usar el método changeEtherBalances
         // Source: https://ethereum-waffle.readthedocs.io/en/latest/matchers.html#change-ether-balance-multiple-accounts
         // Ejemplo:
