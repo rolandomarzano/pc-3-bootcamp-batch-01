@@ -41,7 +41,7 @@ contract MiPrimerNft is
     }
 
     function _baseURI() internal pure override returns (string memory) {
-        return "ipfs://QmVZkuCVeMStEYnYj1vFYDEdggwoQ2evHFn7wmj97RMUmf/";
+        return "ipfs://Qmc5H5VvJJZ32PaAaaJ7re8KKQEXEe62jf44yeuXW5ypfX/";
     }
 
     function pause() public onlyRole(PAUSER_ROLE) {
