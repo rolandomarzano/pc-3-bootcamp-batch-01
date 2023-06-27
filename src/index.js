@@ -133,7 +133,7 @@ function setUpListeners() {
 
       const response = await tx.wait();
 
-      console.log('Transaction:', response.transactionHash);
+      console.log('Transaction aprove:', response.transactionHash);
     } catch (e) {
       approveErrorSpan.textContent = e.message;
     }
@@ -145,15 +145,6 @@ function setUpListeners() {
 
     var purchaseErrorSpan = document.getElementById('purchaseError');
     purchaseErrorSpan.innerHTML = '';
-
-    if (
-      isNaN(purchaseInputNft) ||
-      purchaseInputNft <= 0 ||
-      purchaseInputNft > 30
-    ) {
-      purchaseErrorSpan.textContent = 'Invalid NFT ID';
-      return;
-    }
 
     try {
       const tx = await pubSContract
@@ -189,7 +180,7 @@ function setUpListeners() {
     try {
       const payload = {
         to: pubSContract.address,
-        gasLimit: ethers.utils.hexlify(1500000),
+        gasLimit: ethers.utils.hexlify(1200000),
         value: utils.parseEther('0.01'),
       };
 
@@ -207,16 +198,15 @@ function setUpListeners() {
 function setUpEventsContracts() {
   // nftTknContract.on
   var nftListDiv = document.getElementById('nftList');
-
   nftTknContract.on('Transfer', (from, to, tokenId) => {
-    list.innerHTML += `<li>Transfer from: ${from} to ${to} | Token ID: ${tokenId}</li>`;
+    nftListDiv.innerHTML += `<li>Transfer from: ${from} to ${to} | Token ID: ${tokenId}</li>`;
   });
 }
 
 async function setUp() {
   initSCsGoerli();
   initSCsMumbai();
-  await setUpListeners();
+  setUpListeners();
   setUpEventsContracts();
 }
 

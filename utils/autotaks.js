@@ -22,13 +22,13 @@ exports.handler = async function (data) {
   // Filtrando solo DeliverNft
   var event = onlyEvents.filter((ev) => ev.signature.includes('DeliverNft'));
   // Mismos params que en el evento
-  var { account, tokens } = event[0].params;
+  var { winnerAccount, nftId } = event[0].params;
 
-  // Ejecutar 'mint' en Goerli del contrato MiPrimerToken
-  var miPrimerTokenAdd = '0x49EF969Aa11665942036f29C882664C67eb25495';
-  var tokenAbi = ['function mint(address to, uint256 amount)'];
-  var tokenContract = new ethers.Contract(miPrimerTokenAdd, tokenAbi, signer);
-  var tx = await tokenContract.mint(account, tokens);
+  // Ejecutar 'safeMint' en Goerli del contrato miPrimerNFT
+  var miPrimerNFTAdd = '0xAFEee7076fa51784f8cFA8A04F25272Cc3f99172';
+  var tokenAbi = ['function safeMint(address to, uint256 amount)'];
+  var tokenContract = new ethers.Contract(miPrimerNFTAdd, tokenAbi, signer);
+  var tx = await tokenContract.safeMint(winnerAccount, nftId);
   var res = await tx.wait();
   return res;
 };

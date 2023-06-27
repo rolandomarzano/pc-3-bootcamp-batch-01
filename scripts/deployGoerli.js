@@ -27,7 +27,7 @@ async function deployGoerli() {
   );
 
   await ex(publicSale, 'setMiPrimerToken', [miPrimerToken.address], 'SMP');
-  await ex(publicSale, 'setGnosisWallet', [gnosis.address], 'SGW');
+  await ex(publicSale, 'setGnosisSafeWallet', [gnosis.address], 'SGW');
 
   verify(implementationPublicSale, 'PublicSale', []);
   verify(implementationMiPrimerToken, 'MiPrimerToken', []);
