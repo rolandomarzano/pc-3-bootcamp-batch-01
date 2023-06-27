@@ -1,5 +1,48 @@
 # Bootcamp Presencial - Batch 01
 
+### Evidencias del desarrollo de PC3
+
+### Mumbai
+
+- NFT Proxy Address: [0xAFEee7076fa51784f8cFA8A04F25272Cc3f99172](https://mumbai.polygonscan.com/address/0xAFEee7076fa51784f8cFA8A04F25272Cc3f99172)
+- NFT Impl Address: [0xEaEB868900268D9F7122fACD33698dE2EC2D561d](https://mumbai.polygonscan.com/address/0xEaEB868900268D9F7122fACD33698dE2EC2D561d)
+
+### Goerli
+
+- USDCoin - Imp: [0x8D301a8c73Fdb0317945EB96D1E1a78701977D8d](https://goerli.etherscan.io/address/0x8D301a8c73Fdb0317945EB96D1E1a78701977D8d)
+- PublicSale Proxy Address: [0x958F8B1Eb4eA71520bb753d20cCd07D566a3aEA3](https://goerli.etherscan.io/address/0x958F8B1Eb4eA71520bb753d20cCd07D566a3aEA3)
+- PublicSale Impl Address: [0x9cf24a66816C29bEB249B695c033b5b0301BbFa4](https://goerli.etherscan.io/address/0x9cf24a66816C29bEB249B695c033b5b0301BbFa4)
+- MiPrimerToken Proxy Address: [0x72E85f215FF880Ed80bD0a72141461D32961A327](https://goerli.etherscan.io/address/0x72E85f215FF880Ed80bD0a72141461D32961A327)
+- MiPrimerToken Impl Address: [0x49EF969Aa11665942036f29C882664C67eb25495](https://goerli.etherscan.io/address/0x49EF969Aa11665942036f29C882664C67eb25495)
+
+### Front-end
+
+![Front-end PC3](/images/frontend.png)
+
+### OpenZeppelin Defender
+
+### Relayer
+
+- Address: [0xa4399061d0D3a5CA1EFb96e46BFC99778Bd26Df6](https://mumbai.polygonscan.com/address/0xa4399061d0D3a5CA1EFb96e46BFC99778Bd26Df6)
+
+![Relayer PC3](/images/relayer_defender.png)
+
+### Autotask
+
+![Autotask PC3](/images/autotask_defender.png)
+
+### Sentinel
+
+![Sentinel PC3](/images/sentinel_defender.png)
+
+### Gnosis Wallet
+
+- Address: [0x655252000B5aC35239C9B7F112d3F252874763f4](https://goerli.etherscan.io/address/0x655252000B5aC35239C9B7F112d3F252874763f4)
+
+![Gnosis PC3](/images/gnosis_wallet.png)
+
+---
+
 ## Práctica Calificada 3
 
 Estás a punto de lanzar una colección de NFTs para tu comunidad. Escoges la red Polygon (Mumbai) dado que es la red más popular para este tipo de proyectos. Tus usuarios poseen los fondos en la red Ethereum (Goerli) y prefieres que se realice la compra en esta red y luego, cross-chain, acuñar los NFTs en Polygon.
@@ -103,4 +146,3 @@ He creado esta serie de videos que ayudan a entender la PC3. Está en el orden e
 5. [Open Zeppelin Defender](https://drive.google.com/file/d/1yfQoXsqV7SdW1Ms9MHOGiZVkaOCqtE5o/view?usp=drive_link)
 6. [Envio de Ether al SC](https://drive.google.com/file/d/1ssSH-OVm8mX8EpKp4EL2CVeNmgchP2VU/view?usp=drive_link)
 7. [Swap USDC=>MiPrimerToken](https://drive.google.com/file/d/11kgYB4o3SdmHUM0qVIleXWl1HugAZk_b/view?usp=drive_link)
-
